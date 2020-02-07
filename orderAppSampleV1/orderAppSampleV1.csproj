@@ -200,9 +200,17 @@
     <Compile Include="Migrations\202002040911395_Initial.Designer.cs">
       <DependentUpon>202002040911395_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002040914072_AddedOrderModel.cs" />
-    <Compile Include="Migrations\202002040914072_AddedOrderModel.Designer.cs">
-      <DependentUpon>202002040914072_AddedOrderModel.cs</DependentUpon>
+    <Compile Include="Migrations\202002071029332_PopulateTables.cs" />
+    <Compile Include="Migrations\202002071029332_PopulateTables.Designer.cs">
+      <DependentUpon>202002071029332_PopulateTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002071224380_AddedOrderModel.cs" />
+    <Compile Include="Migrations\202002071224380_AddedOrderModel.Designer.cs">
+      <DependentUpon>202002071224380_AddedOrderModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002071225429_InitialOrderRecord.cs" />
+    <Compile Include="Migrations\202002071225429_InitialOrderRecord.Designer.cs">
+      <DependentUpon>202002071225429_InitialOrderRecord.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -480,8 +488,14 @@
     <EmbeddedResource Include="Migrations\202002040911395_Initial.resx">
       <DependentUpon>202002040911395_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002040914072_AddedOrderModel.resx">
-      <DependentUpon>202002040914072_AddedOrderModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002071029332_PopulateTables.resx">
+      <DependentUpon>202002071029332_PopulateTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002071224380_AddedOrderModel.resx">
+      <DependentUpon>202002071224380_AddedOrderModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002071225429_InitialOrderRecord.resx">
+      <DependentUpon>202002071225429_InitialOrderRecord.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

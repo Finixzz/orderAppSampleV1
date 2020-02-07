@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -25,7 +26,7 @@ namespace orderAppSampleV1.Models
         public DbSet<Item> Items { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Order> Orders { get; set; }
-
+        
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

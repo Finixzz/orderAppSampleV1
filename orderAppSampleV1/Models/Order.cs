@@ -9,9 +9,10 @@ namespace orderAppSampleV1.Models
 {
     public class Order
     {
-       
+        [Key, Column(Order = 0),DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
-            
+
+        [Required, Key, Column(Order = 1), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ItemId { get; set; }
 
         public Item Item { get; set; }
@@ -22,8 +23,9 @@ namespace orderAppSampleV1.Models
 
         public string UserId { get; set; }
 
-        public byte Quantity { get; set; }
+        public int Quantity { get; set; }
 
+        [Required,Key, Column(Order = 2), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public DateTime Date { get; set; }
         
     }
