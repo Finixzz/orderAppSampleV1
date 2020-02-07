@@ -18,6 +18,7 @@ namespace orderAppSampleV1.App_Start
             Mapper.CreateMap<Category, CategoryDto>();
             Mapper.CreateMap<CategoryDto, Category>();
 
+
             Mapper.CreateMap<Order, OrderDto>();
             Mapper.CreateMap<OrderDto, Order>();
 

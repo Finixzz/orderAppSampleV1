@@ -86,7 +86,6 @@
                                                 url: "/api/items/" + itemId,
                                                 method: "DELETE"
                                             })
-<<<<<<< HEAD
                                             for (let i = 0; i < dataTableArray.length; ++i) {
                                                 let tempObj = dataTableArray[i];
                                                 if (tempObj.catId == tableId) {
@@ -94,9 +93,14 @@
                                                     break;
                                                 }
                                             }
-=======
-                                            location.href = "/Items";                                      
->>>>>>> ff6b0dda251e2d35998295b59e5628b45cfda00c
+
+                                            for (let i = 0; i < dataTableArray.length; ++i) {
+                                                let tempObj = dataTableArray[i];
+                                                if (tempObj.catId == tableId) {
+                                                    tempObj.table.row(button.parents("tr")).remove().draw();
+                                                    break;
+                                                }
+                                            }   
                                         }
                                     }
                                 })
