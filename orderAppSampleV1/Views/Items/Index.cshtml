@@ -3,7 +3,6 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <button class="btn btn-primary" onclick="location.href='@Url.Action("NewCategory","Items")'">Add New Item Category</button>
 <br />
 <br />
@@ -18,7 +17,7 @@
     <script>
 
         //Helper function for .sort()
-        function compare(a,b) {
+        function compare(a, b) {
             if (a.name < b.name) {
                 return -1;
             }
@@ -48,15 +47,15 @@
                             for (let i = 0; i < categories.length; i++) {
                                 tables += "<table id=" + categories[i].id + " class='table table-bordered table-hover tables'> "
                                     + "<thead>"
-                                    + "<tr><td style='background-color:gray;color:white;font-weight:bold'>"+categories[i].name+"</td></tr>"
+                                    + "<tr><td style='background-color:gray;color:white;font-weight:bold'>" + categories[i].name + "</td></tr>"
                                     + "<tr><td>Name</td><td>Price</td><td>Action</td></tr>"
                                     + "</thead>"
                                     + "<tbody>";
                                 for (let j = 0; j < items.length; j++) {
                                     if (items[j].categoryId == categories[i].id) {
-                                        tables += "<tr><td>"+items[j].name+"</td><td>"+items[j].price+"</td><td><button data-cat-id="+categories[i].id+" data-item-id="+items[j].id+" class='btn btn-primary js-delete'>DELETE</button></td></tr>"     
+                                        tables += "<tr><td>" + items[j].name + "</td><td>" + items[j].price + "</td><td><button data-cat-id=" + categories[i].id + " data-item-id=" + items[j].id + " class='btn btn-primary js-delete'>DELETE</button></td></tr>"
                                     }
-                                }                                  
+                                }
                                 tables += "</tbody></table >"
                             }
 
@@ -70,7 +69,7 @@
                                 dataTableArray.push(tempObject);
                             }
                             console.log(dataTableArray);
-                       
+
                             //Delete Action Handler
                             $("#tables").on("click", ".js-delete", function () {
                                 let button = $(this);
@@ -100,7 +99,7 @@
                                                     tempObj.table.row(button.parents("tr")).remove().draw();
                                                     break;
                                                 }
-                                            }   
+                                            }
                                         }
                                     }
                                 })
@@ -108,7 +107,7 @@
 
 
                         }
-                    });  
+                    });
                 }
             });
         });
