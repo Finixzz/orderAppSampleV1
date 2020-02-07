@@ -15,7 +15,7 @@ namespace orderAppSampleV1.Dtos
 
         public string UserId { get; set; }
 
-        public byte Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public DateTime Date { get; set; }
     }
