@@ -176,6 +176,7 @@
   <ItemGroup>
     <Compile Include="Api\CategoriesController.cs" />
     <Compile Include="Api\ItemsController.cs" />
+    <Compile Include="Api\OrdersController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -187,8 +188,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Dtos\CategoryDto.cs" />
     <Compile Include="Dtos\ItemDto.cs" />
+    <Compile Include="Dtos\OrderContentDto.cs" />
+    <Compile Include="Dtos\OrderDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -207,6 +211,7 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderContent.cs" />
     <Compile Include="Models\Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -453,6 +458,7 @@
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Items\NewItem.cshtml" />
     <Content Include="Views\Items\NewCategory.cshtml" />
+    <Content Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

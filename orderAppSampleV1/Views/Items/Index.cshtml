@@ -80,12 +80,7 @@
                                                 url: "/api/items/" + itemId,
                                                 method: "DELETE"
                                             })
-                                            //location.href = "/Items";
-                                            let tableTemp = $(this).attr("data-cat-id");
-                                            let tabela = $(`#${tableTemp}`);
-                                            console.log(tabela);
-                                            $(`#${tableTemp}`).row($(this).parents("tr")).remove().draw();
-
+                                            location.href = "/Items";                                      
                                         }
                                     }
                                 })
