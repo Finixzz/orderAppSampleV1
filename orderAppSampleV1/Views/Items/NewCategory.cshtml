@@ -1,0 +1,68 @@
+﻿@model orderAppSampleV1.Models.Category
+@{
+    ViewBag.Title = "NewCategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width:350px;">
+    <div class="row">
+        <div class="col s12">
+            <div id="main" class="card">
+                <div class="card-content">
+                    <span class="card-title center">Add new category</span>
+                    <div class="row center">
+                        <br />
+
+
+                        <form id="newCategory">
+
+
+                            <div class="form-group">
+                                <label>Category Name</label>
+                                <input id="name" name="name" required type="text" value="" class="form-control" />
+                            </div>
+
+                            <button id="submit" type="submit" class="btn btn-primary">Save</button>
+
+
+                        </form>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script>
+
+            $(document).ready(function () {
+                $("#newCategory").validate({
+                    submitHandler: function () {
+                        let category = {};
+                        category.name = $("#name").val();
+                        $.ajax({
+                            url: "/api/categories",
+                            method: "POST",
+                            data: category
+                        }).done(function () {
+                            toastr.success("New category added succesfully");
+                            document.querySelector("#name").value = "";
+                        }).fail(function () {
+                            toastr.fail("Something went wrong!");
+                        });
+                    }
+                });
+            })
+
+
+        </script>
+
+
+    }
+

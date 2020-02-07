@@ -1,0 +1,80 @@
+﻿@model orderAppSampleV1.ViewModels.ItemFormViewModel
+@{
+    ViewBag.Title = "NewItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width:350px;">
+    <div class="row">
+        <div class="col s12">
+            <div id="main" class="card">
+                <div class="card-content">
+                    <span class="card-title center">Add new item</span>
+                    <div class="row center">
+                        <br />
+                        <form id="newItem">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input id="itemName" name="name" required type="text" value="" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Item type</label>
+                                <select id="itemCategory" class="form-control"></select>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label>Price</label>
+                                <input id="itemPrice" name="name" required type="text" value="" class="form-control" />
+
+                            </div>
+
+                            <button id="save" type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section scripts{
+        @Scripts.Render("~/bundles/jqueryval")
+
+        <script>
+            $(document).ready(function () {
+                let dropDownList = $("#itemCategory");
+                $.ajax({
+                    url: "/api/categories",
+                    method: "GET",
+                    data: "{}",
+                    success: function (categories) {
+                        let listContent = "<option style='text-align:center;'>Select item category</option>";
+                        for (let i = 0; i < categories.length; i++) {
+                            listContent += "<option value=" + categories[i].id + ">" + categories[i].name + "</option>";
+                        }
+                        dropDownList.html(listContent);
+                    }
+                });
+
+                $("#newItem").validate({
+                    submitHandler: function () {
+                        let item = {};
+                        item.name = $("#itemName").val();
+                        item.price = parseInt($("#itemPrice").val());
+                        item.categoryId = parseInt($("#itemCategory").val());
+                        $.ajax({
+                            url: "/api/items",
+                            method: "POST",
+                            data: item
+                        }).done(function () {
+                            toastr.success("Item added succesfuly");
+                            document.querySelector("#itemName").value = "";
+                            document.querySelector("#itemPrice").value = "";
+                        }).fail(function () {
+                            toastr.error("Something went wrong!");
+                        });
+                    }
+                });
+            });
+        </script>
+    }
