@@ -48,7 +48,7 @@
                     method: "GET",
                     data: "{}",
                     success: function (categories) {
-                        let listContent = "<option style='text-align:center;'>Select item category</option>";
+                        let listContent = "<option value="+0+"  style='text-align:center;'>Select item category</option>";
                         for (let i = 0; i < categories.length; i++) {
                             listContent += "<option value=" + categories[i].id + ">" + categories[i].name + "</option>";
                         }
@@ -60,7 +60,9 @@
                     submitHandler: function () {
                         let item = {};
                         item.name = $("#itemName").val();
-                        item.price = parseInt($("#itemPrice").val());
+                        let price = $("#itemPrice").val();
+                        price = price.replace(",", ".");
+                        item.price = parseFloat(price);
                         item.categoryId = parseInt($("#itemCategory").val());
                         $.ajax({
                             url: "/api/items",
@@ -70,6 +72,7 @@
                             toastr.success("Item added succesfuly");
                             document.querySelector("#itemName").value = "";
                             document.querySelector("#itemPrice").value = "";
+                            $("#itemCategory").val(0);
                         }).fail(function () {
                             toastr.error("Something went wrong!");
                         });

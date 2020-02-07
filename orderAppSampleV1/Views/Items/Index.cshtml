@@ -61,15 +61,21 @@
                             }
 
 
+                            let dataTableArray = [];
                             //Datatables for each item category
                             $("#tables").html(tables);
                             for (let i = 0; i < categories.length; i++) {
-                                $("#" + categories[i].id).DataTable();
+                                let tempObject = { catId: categories[i].id };
+                                tempObject.table = $("#" + tempObject.catId).DataTable();
+                                dataTableArray.push(tempObject);
                             }
-
+                            console.log(dataTableArray);
+                       
                             //Delete Action Handler
-                            $(".js-delete").on("click", function () {
-                                const itemId = $(this).attr("data-item-id");
+                            $("#tables").on("click", ".js-delete", function () {
+                                let button = $(this);
+                                const tableId = button.attr("data-cat-id");
+                                const itemId = button.attr("data-item-id");
                                 let succes;
                                 bootbox.confirm({
                                     message: "Are you sure you want to delete this item?",
@@ -80,12 +86,13 @@
                                                 url: "/api/items/" + itemId,
                                                 method: "DELETE"
                                             })
-                                            //location.href = "/Items";
-                                            let tableTemp = $(this).attr("data-cat-id");
-                                            let tabela = $(`#${tableTemp}`);
-                                            console.log(tabela);
-                                            $(`#${tableTemp}`).row($(this).parents("tr")).remove().draw();
-
+                                            for (let i = 0; i < dataTableArray.length; ++i) {
+                                                let tempObj = dataTableArray[i];
+                                                if (tempObj.catId == tableId) {
+                                                    tempObj.table.row(button.parents("tr")).remove().draw();
+                                                    break;
+                                                }
+                                            }
                                         }
                                     }
                                 })
