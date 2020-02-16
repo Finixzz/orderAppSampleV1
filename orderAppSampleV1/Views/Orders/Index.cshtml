@@ -4,5 +4,269 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="container center" style="width:500px;">
+    <div class="row">
+        <div class="col s12">
+            <div id="main" class="card">
+                <div class="card-content">
+                    <span class="card-title">iOrder</span>
+                    <div class="row">
+                        <div class="order-form">
+                            <form id="newOrder">
+                                <select id="selectedTable" class="form-control" style="margin-left:auto; margin-right:auto;">
+                                    <option value="0" style="text-align:center" required>Select table number</option>
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <option value="@i" class="js-selected" required type="text">@i</option>
+                                    }
+                                </select>
+                                <br />
+                                <ul id="orderContent" class="list-group"></ul>
+                                <br />
+
+                                <p>
+
+                                <p></p>
+                                <h2 id="price">Price: $0.0</h2>
+                                <button id="save" type="button" class="btn btn-primary">Sumbit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <a class="clear-order btn black" href="">Clear Order</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="tables">
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+
+        let order = {
+            itemId: [],
+            tableId: 0,
+            userId: "willBeAdded",
+            quantity: [],
+            date: "",
+            totalOrderPrice: 0,
+            append: function (_itemId, _quantity) {
+                this.itemId.push(_itemId);
+                this.quantity.push(_quantity);
+            },
+
+            countTotalPrice: function (item) {
+                this.totalOrderPrice += item.price;
+                $('#price').text("Price: $" + this.totalOrderPrice);
+            },
+            addItem: function (item) {
+
+                this.countTotalPrice(item);
+
+                let uslov = 0;
+                for (let i = 0; i < this.itemId.length; i++) {
+                    if (this.itemId[i] == item.id) {
+                        uslov++;
+                        this.quantity[i]++;
+                        $("#" + item.id).val(this.quantity[i]);
+                        break;
+                    }
+                }
+                if (!uslov) {
+                    this.append(item.id, item.quantity);
+                    let html = `
+                                            <div class="order-list-element">
+                                            <li class='list-group-item '>`+ item.name + `</li>
+                                            <button type="button"  class="btn js-decrement" data-item-id="${item.id}"  data-item-name="${item.name}" data-item-price="${item.price}">- </button>
+                                            <input  id="${item.id}"style="text-align:center" type="text"  value="${item.quantity}" maxlength="12"/>
+                                            <button type="button"  class="btn js-increment" data-item-id="${item.id}"  data-item-name="${item.name}" data-item-price="${item.price}">+ </button>
+                                            <button type="button"  class="btn js-remove" data-item-id="${item.id}"  data-item-name="${item.name}" data-item-price="${item.price}">X</button>
+                                            </div><br/>`;
+                    $("#orderContent").append(html);
+                    toastr.success("Item added successfuly");
+
+                }
+            },
+            decrementItemQty: function (item) {
+                item.price *= -1;
+                for (let i = 0; i < this.itemId.length; i++) {
+                    if (this.itemId[i] == item.id) {
+                        if (this.quantity[i] == 1) {
+                            toastr.error("Click X to remove item!");
+                        } else {
+                            this.quantity[i]--;
+                            $("#" + item.id).val(this.quantity[i]);
+                            this.countTotalPrice(item);
+                            break;
+                        }
+                    }
+                }
+            },
+            removeItem: function (item) {
+                for (let i = 0; i < this.itemId.length; i++) {
+                    if (this.itemId[i] == item.id) {
+                        item.price = -1 * (this.quantity[i] * parseFloat(item.price));
+                        this.countTotalPrice(item);
+                        this.itemId.pop(item.id);
+                        this.quantity.pop(item.id);
+
+                    }
+                }
+                toastr.success("Item removed successfully");
+            }
+
+
+        };
+
+
+        $(document).ready(function () {
+
+
+            
+            //Helper function for .sort()
+            function compare(a, b) {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            }
+
+
+            $.ajax({
+                url: "/api/categories",
+                method: "GET",
+                data: "{}",
+                success: function (categories) {
+
+                    //Sorting categories based on their name not id in Database
+                    categories.sort(compare);
+
+                    $.ajax({
+                        url: "/api/items",
+                        method: "GET",
+                        data: "{}",
+                        success: function (items) {
+                            let tables = "";
+                            for (let i = 0; i < categories.length; i++) {
+                                tables += "<table id=" + categories[i].id + " class='table table-bordered table-hover tables'> "
+                                    + "<thead>"
+                                    + "<tr><td style='background-color:gray;color:white;font-weight:bold'>" + categories[i].name + "</td></tr>"
+                                    + "<tr><td>Name</td><td>Price</td><td>Action</td></tr>"
+                                    + "</thead>"
+                                    + "<tbody>";
+                                for (let j = 0; j < items.length; j++) {
+                                    if (items[j].categoryId == categories[i].id) {
+                                        tables += `<tr><td>${items[j].name}</td><td>${items[j].price} $</td><td><button data-cat-id=" ${categories[i].id} " data-item-id="${items[j].id}"  data-item-name="${items[j].name}" data-item-price="${items[j].price}"class='btn btn-primary js-add'>ADD</button></td></tr>`;
+                                    }
+                                }
+                                tables += "</tbody></table >"
+                            }
+
+
+                            let dataTableArray = [];
+                            //Datatables for each item category
+                            $("#tables").html(tables);
+                            for (let i = 0; i < categories.length; i++) {
+                                let tempObject = { catId: categories[i].id };
+                                tempObject.table = $("#" + tempObject.catId).DataTable();
+                                dataTableArray.push(tempObject);
+                            }
+
+                            $(".js-add").on("click", function () {
+                                let button = $(this);
+                                let item = {};
+                                item.id = parseInt($(this).attr("data-item-id"));
+                                item.name = button.attr("data-item-name");
+                                item.price = parseFloat($(this).attr("data-item-price"));
+                                item.quantity = 1;
+                                order.addItem(item);
+                            });
+
+                            $("#orderContent").on("click", ".js-increment", function () {
+                                let button = $(this);
+                                let item = {};
+                                item.id = parseInt($(this).attr("data-item-id"));
+                                item.name = button.attr("data-item-name");
+                                item.price = parseFloat($(this).attr("data-item-price"));
+                                item.quantity = 1;
+                                order.addItem(item);
+
+                            });
+
+                            $("#orderContent").on("click", ".js-decrement", function () {
+                                let button = $(this);
+                                let item = {};
+                                item.id = parseInt(button.attr("data-item-id"));
+                                item.name = button.attr("data-item-name");
+                                item.price = parseFloat(button.attr("data-item-price"));
+                                item.quantity = 1;
+                                order.decrementItemQty(item);
+                           
+                            });
+
+
+                            $("#orderContent").on("click", ".js-remove", function () {
+                                let button = $(this);
+                                let item = {};
+                                item.id = parseInt(button.attr("data-item-id"));
+                                item.name = button.attr("data-item-name");
+                                item.price = parseFloat(button.attr("data-item-price"));
+                                item.quantity = 1;
+                                order.removeItem(item);
+                                $(this).closest("div").remove();
+                                
+                            });
+                            
+                            $("#save").on("click", function () {
+                                order.tableId = parseInt($("#selectedTable").val());
+                                order.itemId.length == 0
+                                if (order.itemId.length == 0) {
+                                    toastr.error("You didnt ordered anything!");
+                                } else if (order.tableId === 0) {
+                                    toastr.error("Please select table number!");
+                                } else {
+                                            let apiData={
+                                                itemId: order.itemId,
+                                                tableId: order.tableId,
+                                                userId: "willBeAdded",
+                                                quantity: order.quantity,
+                                                date: "",
+                                            };
+                                    console.log(apiData);
+                                            bootbox.confirm({
+                                                message: "Click OK in order to confirm your order",
+                                                size: "xl",
+                                                callback: function (result) {
+                                                    if (result) {
+                                                        $.ajax({
+                                                            url: "/api/orders",
+                                                            method: "POST",
+                                                            data: apiData,
+                                                            success: function () {
+                                                                    window.location.href = "/Home";
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            })
+                                       }
+                            });
+
+                        }
+                    });
+                }
+            });
+        });
+
+    </script>
+
+}
 
