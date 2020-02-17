@@ -112,8 +112,8 @@
                     if (this.itemId[i] == item.id) {
                         item.price = -1 * (this.quantity[i] * parseFloat(item.price));
                         this.countTotalPrice(item);
-                        this.itemId.pop(item.id);
-                        this.quantity.pop(item.id);
+                        this.itemId.splice(i, 1);
+                        this.quantity.splice(i, 1);
 
                     }
                 }
